@@ -1,0 +1,63 @@
+
+--# Exercises: Complex query
+
+--1. Write a query that will return the number of users who rated a book above it's average rating.
+/*
+select count ( USER_ID) as no_of_users
+from booksdb.dbo.ratings
+where rating > (select avg(rating) from booksdb.dbo.ratings)
+*/
+--2. Write a query that returns the book ids of all books that have 
+--over 1000 ratings of 1 star or over 1000 ratings of 5 stars.
+SELECT book_id
+FROM booksdb.dbo.ratings
+WHERE rating = 1
+GROUP BY book_id
+HAVING COUNT(*) > 1000
+
+UNION
+
+SELECT book_id
+FROM booksdb.dbo.ratings
+WHERE rating = 5
+GROUP BY book_id
+HAVING COUNT(*) > 1000;
+
+--3. Write a query that returns the book ids of all books that have over 1000 ratings of 1 star and over 1000 ratings of 5 stars.
+SELECT book_id
+FROM booksdb.dbo.ratings
+WHERE rating = 1
+GROUP BY book_id
+HAVING COUNT(*) > 1000
+
+INTERSECT
+
+SELECT book_id
+FROM booksdb.dbo.ratings
+WHERE rating = 5
+GROUP BY book_id
+HAVING COUNT(*) > 1000;
+
+--4. Write a query that returns the book ids of books that have a language code of "en-US" 
+--and not a langugae code of "en-GB".
+SELECT book_id 
+FROM BooksDB.dbo.books 
+WHERE language_code = 'en-US'
+
+EXCEPT 
+
+SELECT book_id 
+FROM BooksDB.dbo.books 
+WHERE language_code = 'en-GB'
+
+--5. Write a query that returns the names of the tags and the tag ids for tags 
+--that were used over 100,000 times for a book. 
+
+SELECT tag_id, tag_name
+FROM BooksDB.dbo.tags
+WHERE tag_id IN (
+    SELECT tag_id
+    FROM BooksDB.dbo.book_tags
+    GROUP BY tag_id
+    HAVING COUNT(*) > 100000
+);
