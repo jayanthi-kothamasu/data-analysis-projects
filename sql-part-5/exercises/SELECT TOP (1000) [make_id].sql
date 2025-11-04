@@ -1,0 +1,5 @@
+SELECT TOP (1000) [make_id]
+      ,[project_name]
+      ,[category]
+      ,[planned_date]
+  FROM [Sep2025JunkDB].[jayanthi_kotturi].[planned_makes]
